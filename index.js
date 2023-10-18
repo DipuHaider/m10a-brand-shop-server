@@ -23,19 +23,26 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    const brandCollection = client.db("automotiveDB").collection("brands");
-    const userCollection = client.db("automotiveDB").collection("users");
+    const brandCollection = client.db("automotiveDB").collection("brand");
+    const userCollection = client.db("automotiveDB").collection("user");
 
     // brand related apis
-    app.post("/brands", async (req, res) => {
+    app.post("/brand", async (req, res) => {
       const newBrand = req.body;
       console.log(newBrand);
       const result = await brandCollection.insertOne(newBrand);
       res.send(result);
     });
 
+    app.get("/brand/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await coffeeCollection.findOne(query);
+      res.send(result);
+    });
+
     //user related apis
-    app.post("/users", async (req, res) => {
+    app.post("/user", async (req, res) => {
       const newUser = req.body;
       console.log(newUser);
       const result = await userCollection.insertOne(newUser);
