@@ -36,9 +36,9 @@ async function run() {
     });
 
     //Read single Brand
-    app.get("/brand/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
+    app.get("/brand/:name", async (req, res) => {
+      const name = req.params.name;
+      const query = { name: name };
       const result = await brandCollection.findOne(query);
       res.send(result);
     });
