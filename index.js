@@ -25,6 +25,17 @@ async function run() {
 
     const userCollection = client.db("automotiveDB").collection("user");
     const brandCollection = client.db("automotiveDB").collection("brand");
+    const productCollection = client.db("automotiveDB").collection("product");
+
+    //Product related apis
+
+    //Create product
+    app.post("/product", async (req, res) => {
+      const newProduct = req.body;
+      console.log(newProduct);
+      const result = await productCollection.insertOne(newProduct);
+      res.send(result);
+    });
 
     // brand related apis
 
