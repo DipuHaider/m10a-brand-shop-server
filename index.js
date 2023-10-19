@@ -23,10 +23,27 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    const brandCollection = client.db("automotiveDB").collection("brand");
     const userCollection = client.db("automotiveDB").collection("user");
+    const brandCollection = client.db("automotiveDB").collection("brand");
 
     // brand related apis
+
+    //Read brand
+    app.get("/brand", async (req, res) => {
+      const cursor = brandCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    //Read single Brand
+    app.get("/brand/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await brandCollection.findOne(query);
+      res.send(result);
+    });
+
+    //Create Brand
     app.post("/brand", async (req, res) => {
       const newBrand = req.body;
       console.log(newBrand);
@@ -34,14 +51,38 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/brand/:id", async (req, res) => {
+    //Update Brand
+    app.put("/brand/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedBrand = req.body;
+
+      const brand = {
+        $set: {
+          name: updatedBrand.name,
+          logo: updatedBrand.logo,
+          banner1: updatedBrand.banner1,
+          banner2: updatedBrand.banner2,
+          banner3: updatedBrand.banner3,
+        },
+      };
+
+      const result = await brandCollection.updateOne(filter, brand, options);
+      res.send(result);
+    });
+
+    //Delete Brand
+    app.delete("/brand/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      const result = await coffeeCollection.findOne(query);
+      const result = await brandCollection.deleteOne(query);
       res.send(result);
     });
 
     //user related apis
+
+    //create user
     app.post("/user", async (req, res) => {
       const newUser = req.body;
       console.log(newUser);
