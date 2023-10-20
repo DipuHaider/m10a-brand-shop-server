@@ -35,17 +35,6 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
-    // app.get("/product", async (req, res) => {
-    //   const brandId = req.query.brandname; // Get the brandname from the query parameters
-
-    //   if (!brandId) {
-    //     return res.status(400).json({ error: "brandname is required" });
-    //   }
-
-    //   const cursor = productCollection.find({ brandname: brandId }); // Filter products by brand_id
-    //   const result = await cursor.toArray();
-    //   res.send(result);
-    // });
 
     //Read single product
     app.get("/product/:id", async (req, res) => {
@@ -60,6 +49,32 @@ async function run() {
       const newProduct = req.body;
       console.log(newProduct);
       const result = await productCollection.insertOne(newProduct);
+      res.send(result);
+    });
+
+    //Update product
+    app.put("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedProduct = req.body;
+
+      const product = {
+        $set: {
+          name: updatedProduct.name,
+          image: updatedProduct.image,
+          // type: updatedProduct.type,
+          price: updatedProduct.price,
+          desc: updatedProduct.desc,
+          rating: updatedProduct.rating,
+        },
+      };
+
+      const result = await productCollection.updateOne(
+        filter,
+        product,
+        options
+      );
       res.send(result);
     });
 
