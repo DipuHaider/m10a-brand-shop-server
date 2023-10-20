@@ -29,6 +29,32 @@ async function run() {
 
     //Product related apis
 
+    //Read product
+    app.get("/product", async (req, res) => {
+      const cursor = productCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    // app.get("/product", async (req, res) => {
+    //   const brandId = req.query.brandname; // Get the brandname from the query parameters
+
+    //   if (!brandId) {
+    //     return res.status(400).json({ error: "brandname is required" });
+    //   }
+
+    //   const cursor = productCollection.find({ brandname: brandId }); // Filter products by brand_id
+    //   const result = await cursor.toArray();
+    //   res.send(result);
+    // });
+
+    //Read single product
+    app.get("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await productCollection.findOne(query);
+      res.send(result);
+    });
+
     //Create product
     app.post("/product", async (req, res) => {
       const newProduct = req.body;
@@ -47,9 +73,9 @@ async function run() {
     });
 
     //Read single Brand
-    app.get("/brand/:name", async (req, res) => {
-      const name = req.params.name;
-      const query = { name: name };
+    app.get("/brand/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
       const result = await brandCollection.findOne(query);
       res.send(result);
     });
