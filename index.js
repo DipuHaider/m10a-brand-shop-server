@@ -89,7 +89,7 @@ async function run() {
         $set: {
           name: updatedProduct.name,
           image: updatedProduct.image,
-          // type: updatedProduct.type,
+          type: updatedProduct.type,
           price: updatedProduct.price,
           desc: updatedProduct.desc,
           rating: updatedProduct.rating,
