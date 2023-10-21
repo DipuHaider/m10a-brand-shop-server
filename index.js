@@ -31,7 +31,7 @@ async function run() {
     //Cart related apis
 
     //Read cart
-    app.get("/mycart", async (req, res) => {
+    app.get("/cart", async (req, res) => {
       const cursor = cartCollection.find();
       const result = await cursor.toArray();
       res.send(result);
@@ -42,6 +42,14 @@ async function run() {
       const newCart = req.body;
       console.log(newCart);
       const result = await cartCollection.insertOne(newCart);
+      res.send(result);
+    });
+
+    //Delete product from cart
+    app.delete("/cart/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await cartCollection.deleteOne(query);
       res.send(result);
     });
 
