@@ -26,6 +26,24 @@ async function run() {
     const userCollection = client.db("automotiveDB").collection("user");
     const brandCollection = client.db("automotiveDB").collection("brand");
     const productCollection = client.db("automotiveDB").collection("product");
+    const cartCollection = client.db("automotiveDB").collection("cart");
+
+    //Cart related apis
+
+    //Read cart
+    app.get("/mycart", async (req, res) => {
+      const cursor = cartCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    //Add to cart
+    app.post("/cart", async (req, res) => {
+      const newCart = req.body;
+      console.log(newCart);
+      const result = await cartCollection.insertOne(newCart);
+      res.send(result);
+    });
 
     //Product related apis
 
